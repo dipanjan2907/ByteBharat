@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --animate-slide: slide 120s linear infinite;
+  --animate-fade-in-up: fade-in-up 0.8s ease-out forwards;
+  
+  @keyframes slide {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+  }
+  
+  @keyframes fade-in-up {
+    0% {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* Base resets for dark theme */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #050505;
+  color: #f1f5f9;
+}
