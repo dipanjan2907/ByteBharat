@@ -3,6 +3,8 @@ const multer = require("multer");
 const path = require("path");
 const reelController = require("../controllers/reel.controller");
 const { authMiddleware, optionalAuthMiddleware } = require("../middleware/auth");
+const { uploadLimiter } = require("../middleware/rateLimiter");
+const { validateCreateReel, validateMongoId } = require("../middleware/validation");
 const router = express.Router();
 
 // Configure multer to store uploaded reels in the uploads folder
@@ -22,10 +24,11 @@ const upload = multer({
 });
 
 router.get("/", optionalAuthMiddleware, reelController.getAllReels);
-router.post("/create", authMiddleware, upload.single("video"), reelController.createReel);
+router.post("/create", authMiddleware, upload.single("video"), uploadLimiter, validateCreateReel, reelController.createReel);
 router.get("/me", authMiddleware, reelController.getMeReels);
-router.post("/:id/view", authMiddleware, reelController.incrementViews);
-router.post("/:id/like", authMiddleware, reelController.toggleLikeReel);
-router.delete("/:id", authMiddleware, reelController.deleteReel);
+router.post("/:id/view", authMiddleware, validateMongoId("id"), reelController.incrementViews);
+router.post("/:id/like", authMiddleware, validateMongoId("id"), reelController.toggleLikeReel);
+router.delete("/:id", authMiddleware, validateMongoId("id"), reelController.deleteReel);
 
 module.exports = router;
+
