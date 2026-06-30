@@ -6,7 +6,6 @@ import {
   faEnvelope,
   faLock,
   faArrowLeft,
-  faPlay,
   faAt,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -61,7 +60,7 @@ const Register = () => {
       });
 
       const data = await res.json();
-
+      navigate("/login");
       if (!res.ok) {
         throw new Error(data.message || "Registration failed");
       }
