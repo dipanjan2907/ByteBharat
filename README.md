@@ -60,7 +60,8 @@ ByteBharat/
 Before running the application, ensure you have the following installed:
 *   Node.js (v18 or higher recommended)
 *   npm
-*   MongoDB (running locally or a MongoDB Atlas URI)
+*   Docker and Docker Compose (recommended)
+*   MongoDB (running locally or a MongoDB Atlas URI, if not using Docker)
 
 ## Installation and Setup
 
@@ -68,26 +69,50 @@ Before running the application, ensure you have the following installed:
 Ensure you have cloned or downloaded the project repository to your local machine.
 
 ### 2. Backend Setup
-Navigate to the backend directory, install dependencies, and configure the environment.
 
-```bash
-cd backend
-npm install
-```
+You can run the backend and database services either using Docker (recommended) or locally on your host machine.
 
-Create or verify the `.env` file in the `backend` directory. It requires the following variables:
-```env
-PORT=5000
-MONGO_URI=mongodb://localhost:27017/bytebharat
-JWT_SECRET=your_secure_jwt_secret
-REFRESH_TOKEN_SECRET=your_secure_refresh_token_secret
-```
+#### Option A: Running with Docker (Recommended)
 
-Start the backend development server:
-```bash
-npm run dev
-```
-The server will start on port 5000 and connect to the local MongoDB instance.
+1. **Create the external Docker network**:
+   Since the configuration uses an external network named `bytebharat-network`, create it first:
+   ```bash
+   docker network create bytebharat-network
+   ```
+
+2. **Configure Environment Variables**:
+   Create or verify the `.env` file in the `backend` directory. It requires the following variables:
+   ```env
+   PORT=5000
+   MONGO_URI=mongodb://localhost:27017/bytebharat
+   JWT_SECRET=your_secure_jwt_secret
+   REFRESH_TOKEN_SECRET=your_secure_refresh_token_secret
+   ```
+
+3. **Start the services**:
+   From the `backend` directory, run the following command to build the image and start the database, Mongo Express, and the backend application:
+   ```bash
+   docker compose up --build
+   ```
+   - **Backend Server**: accessible at `http://localhost:5000`
+   - **Mongo Express**: accessible at `http://localhost:8081`
+
+#### Option B: Running Locally
+
+1. **Install dependencies**:
+   ```bash
+   cd backend
+   npm install
+   ```
+
+2. **Configure Environment Variables**:
+   Create or verify the `.env` file in the `backend` directory (using the same variables as step 2 above). Ensure you have a local MongoDB instance running on port `27017`.
+
+3. **Start the backend development server**:
+   ```bash
+   npm run dev
+   ```
+   The server will start on port 5000 and connect to the local MongoDB instance.
 
 ### 3. Frontend Setup
 Open a new terminal window, navigate to the frontend directory, and install dependencies.
