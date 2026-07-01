@@ -25,7 +25,13 @@ async function getAllReels(req, res) {
 
 async function createReel(req, res) {
   try {
-    const { username, title } = req.body;
+    const { title } = req.body;
+    const username = req.user?.username;
+
+    if (!username) {
+      return res.status(401).json({ message: "Unauthorized: Username not found in token" });
+    }
+
     let videoUrl = req.body.videoUrl;
     let tags = [];
 
